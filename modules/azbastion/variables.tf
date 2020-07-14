@@ -1,0 +1,1 @@
+variable = "resource group name"
