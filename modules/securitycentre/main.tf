@@ -4,7 +4,7 @@ resource "azurerm_resource_group" "resource_group" {
 }
 
 resource "azurerm_log_analytics_workspace" "log_analytics_workspace" {
-  name                = "security-service-workspace"
+  name                = "${var.prefix}security-service-workspace"
   location            = var.location
   resource_group_name = azurerm_resource_group.resource_group.name
   sku                 = "PerGB2018"
