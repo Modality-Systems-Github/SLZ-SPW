@@ -21,13 +21,13 @@ resource "azurerm_resource_group" "example-1" {
 }
 module "storage" {
   source               = "./modules/storageaccounts"
-  storage_account_name = "modalityhacksto4"
+  storage_account_name = "spwstore4"
   location             = azurerm_resource_group.example.location
   resourcegroupname    = azurerm_resource_group.example.name
 }
 module "storage2" {
   source               = "./modules/storageaccounts"
-  storage_account_name = "modalityhacksto5"
+  storage_account_name = "spwstore5"
   Replication_type     = "GRS"
   location             = azurerm_resource_group.example.location
   resourcegroupname    = azurerm_resource_group.example.name
@@ -81,10 +81,12 @@ module "security_centre" {
   resname         = var.security_centre_RG_Name
   location        = var.location
   subscription_id = var.subscription_id
+  prefix = "spw-"
 
 }
 module "log_analytics" {
   source = "./modules/log_analytics"
+  prefix = "spw-"
   #name                = var.name
   #solution_plan_map   = var.solution_plan_map
   #resource_group_name = var.rg
