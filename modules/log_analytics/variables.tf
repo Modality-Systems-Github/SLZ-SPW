@@ -1,4 +1,4 @@
-variable "rg" {
+variable "resname" {
   description = "Resource group name"
   default     = "SBD-RG-OPS"
 }

@@ -12,7 +12,7 @@ terraform {
   }
 }
 resource "azurerm_resource_group" "example" {
-  name     = var.resname 
+  name     = var.resname
   location = var.location
 }
 resource "azurerm_resource_group" "example-1" {
@@ -32,10 +32,26 @@ module "storage2" {
   location             = azurerm_resource_group.example.location
   resourcegroupname    = azurerm_resource_group.example.name
 }
+resource "random_id" "storage_account" {
+  byte_length = 8
+}
+
+module "storage3" {
+  source               = "./modules/storageaccounts"
+  storage_account_name = "${var.prefix}store${lower(random_id.storage_account.hex)}"
+  Replication_type     = "GRS"
+  location             = azurerm_resource_group.example.location
+  resourcegroupname    = azurerm_resource_group.example.name
+}
 
 module "network_resourcegroup" {
   source   = "./modules/resourcegroups"
   resname  = var.network_resourcegroup_name
+  location = var.location
+}
+module "log_analytics_resourcegroup" {
+  source   = "./modules/resourcegroups"
+  resname  = var.log_analytics_rg
   location = var.location
 }
 module "network" {
@@ -64,9 +80,9 @@ module "network" {
       subnet_network_security_group_id = module.virtual_net_nsg_2.network_security_group_id
     }
     #{
-      #subnet_name                      = "AzureBastionSubnet"
-      #subnet_address_prefix            = "10.0.200.0/24"
-      #subnet_network_security_group_id = null
+    #subnet_name                      = "AzureBastionSubnet"
+    #subnet_address_prefix            = "10.0.200.0/24"
+    #subnet_network_security_group_id = null
     #}
   ]
 }
@@ -81,12 +97,13 @@ module "security_centre" {
   resname         = var.security_centre_RG_Name
   location        = var.location
   subscription_id = var.subscription_id
-  prefix = "spw-"
+  prefix          = "spw-"
 
 }
 module "log_analytics" {
   source = "./modules/log_analytics"
   prefix = "spw-"
+  resname  = module.log_analytics_resourcegroup.resource_group_name
   #name                = var.name
   #solution_plan_map   = var.solution_plan_map
   #resource_group_name = var.rg

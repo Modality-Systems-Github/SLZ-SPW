@@ -24,3 +24,10 @@ variable "resname2" {
   default = "example-resources-2"
   # type = string
 }
+variable "prefix" {
+  # type = string
+}
+variable "log_analytics_rg" {
+  # type = string
+  default = "SBD-RG-OPS"
+}
