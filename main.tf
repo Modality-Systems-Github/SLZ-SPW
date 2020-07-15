@@ -23,24 +23,25 @@ resource "azurerm_resource_group" "example-1" {
 }
 module "storage" {
   source               = "./modules/storageaccounts"
-  storage_account_name = "${var.prefix}store1${lower(random_id.storage_account.hex)}"
+  storage_account_name = "${var.prefix}store1${lower(random_integer.storage_account.result)}"
   location             = azurerm_resource_group.example.location
   resourcegroupname    = azurerm_resource_group.example.name
 }
 module "storage2" {
   source               = "./modules/storageaccounts"
-  storage_account_name = "${var.prefix}store2${lower(random_id.storage_account.hex)}"
+  storage_account_name = "${var.prefix}store2${lower(random_integer.storage_account.result)}"
   Replication_type     = "GRS"
   location             = azurerm_resource_group.example.location
   resourcegroupname    = azurerm_resource_group.example.name
 }
-resource "random_id" "storage_account" {
-  byte_length = 4
+resource "random_integer" "storage_account" {
+  min     = 100
+  max     = 9999
 }
 
 module "storage3" {
   source               = "./modules/storageaccounts"
-  storage_account_name = "${var.prefix}store${lower(random_id.storage_account.hex)}"
+  storage_account_name = "${var.prefix}store${lower(random_integer.storage_account.result)}"
   Replication_type     = "GRS"
   location             = azurerm_resource_group.example.location
   resourcegroupname    = azurerm_resource_group.example.name
