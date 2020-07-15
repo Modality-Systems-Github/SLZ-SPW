@@ -14,10 +14,12 @@ terraform {
 resource "azurerm_resource_group" "example" {
   name     = var.resname
   location = var.location
+  tags     = var.tags
 }
 resource "azurerm_resource_group" "example-1" {
   name     = var.resname2
   location = var.location
+  tags     = var.tags
 }
 module "storage" {
   source               = "./modules/storageaccounts"
@@ -48,16 +50,19 @@ module "network_resourcegroup" {
   source   = "./modules/resourcegroups"
   resname  = var.network_resourcegroup_name
   location = var.location
+  tags     = var.tags
 }
 module "log_analytics_resourcegroup" {
   source   = "./modules/resourcegroups"
   resname  = var.log_analytics_rg
   location = var.location
+  tags     = var.tags
 }
 module "network" {
   source   = "github.com/barryhiggins3/modality-vnet"
   resname  = module.network_resourcegroup.resource_group_name
   location = var.location
+  tags     = var.tags
   subnets = [
     {
       subnet_name                      = "web"
@@ -98,19 +103,16 @@ module "security_centre" {
   location        = var.location
   subscription_id = var.subscription_id
   prefix          = "spw-"
-
 }
 module "log_analytics" {
-  source = "./modules/log_analytics"
-  prefix = "spw-"
+  source   = "./modules/log_analytics"
   resname  = module.log_analytics_resourcegroup.resource_group_name
+  location = var.location
+  tags     = var.tags
+  prefix   = "spw-"
   #name                = var.name
   #solution_plan_map   = var.solution_plan_map
   #resource_group_name = var.rg
-  #location            = var.location
-
-
-
 }
 #odule "subnets" {
 #source                = "./modules/virtual_net_nsg/subnet"
@@ -123,13 +125,14 @@ module "log_analytics" {
 #}
 
 module "virtual_net_nsg" {
-  nsgname = "Spaceeye"
-  source  = "./modules/virtual_net_nsg/nsg"
-  resname = module.network_resourcegroup.resource_group_name
+  nsgname  = "Spaceeye"
+  source   = "./modules/virtual_net_nsg/nsg"
+  resname  = module.network_resourcegroup.resource_group_name
+  location = var.location
+  tags     = var.tags
   # virtual_network_name      = azurerm_virtual_network.vnet.name
   # subnets                   = var.networking_object.subnets
   # tags                      = local.tags
-  location = var.location
   # log_analytics_workspace   = var.log_analytics_workspace
   # diagnostics_map           = var.diagnostics_map
 
@@ -170,13 +173,14 @@ module "virtual_net_nsg" {
   ]
 }
 module "virtual_net_nsg_2" {
-  nsgname = "SQL-Allow"
-  source  = "./modules/virtual_net_nsg/nsg"
-  resname = module.network_resourcegroup.resource_group_name
+  nsgname  = "SQL-Allow"
+  source   = "./modules/virtual_net_nsg/nsg"
+  resname  = module.network_resourcegroup.resource_group_name
+  location = var.location
+  tags     = var.tags
   # virtual_network_name      = azurerm_virtual_network.vnet.name
   # subnets                   = var.networking_object.subnets
   # tags                      = local.tags
-  location = var.location
   # log_analytics_workspace   = var.log_analytics_workspace
   # diagnostics_map           = var.diagnostics_map
 
