@@ -35,7 +35,7 @@ module "storage2" {
   resourcegroupname    = azurerm_resource_group.example.name
 }
 resource "random_id" "storage_account" {
-  byte_length = 8
+  byte_length = 4
 }
 
 module "storage3" {
