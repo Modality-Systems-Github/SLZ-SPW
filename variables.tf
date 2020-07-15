@@ -6,7 +6,7 @@ variable "subscription_id" {
   default = "632fe810-836a-4fe4-8a23-c258282b16af"
 }
 variable "security_centre_RG_Name" {
-  default = "RG-Security"
+  default = "SBD-RG-Security"
 
 }
 variable "network_resourcegroup_name" {
@@ -23,4 +23,11 @@ variable "resname" {
 variable "resname2" {
   default = "example-resources-2"
   # type = string
+}
+variable "prefix" {
+  # type = string
+}
+variable "log_analytics_rg" {
+  # type = string
+  default = "SBD-RG-OPS"
 }

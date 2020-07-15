@@ -44,7 +44,7 @@ resource "azurerm_subnet" "subnet" {
   name                 = lookup(var.subnets[count.index], "subnet_name", "default")
   resource_group_name  = azurerm_virtual_network.virtual_network.resource_group_name
   virtual_network_name = azurerm_virtual_network.virtual_network.name
-  address_prefix       = lookup(var.subnets[count.index], "subnet_address_prefix", ["10.0.1.0/24"])
+  address_prefixes     = lookup(var.subnets[count.index], "subnet_address_prefix", ["10.0.1.0/24"])
   count                = length(var.subnets)
 }
 resource "azurerm_subnet_network_security_group_association" "nsg_association" {
