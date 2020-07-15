@@ -1,31 +1,15 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Destroy_Plan
+name: Terraform_Apply
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
-  workflow_dispatch:
-    inputs:
-      action:
-        description: 'Action to trigger (pull or push)'     
-        required: true
-        default: 'pull' 
-  repository_dispatch:
-    types:
-      - "Azure Activity Logs"
-      - "GitHub CLI"
-      - "PowerShell"
-      - "Bash"
+  push:
+    branches: [master]
   pull_request:
-    branches:
-      - "main"
-  pull_request_review:
-    branches:
-      - "main"
-    types:
-      - "submitted"
-    
+    branches: [master]
+
 env:
   ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }} 
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
@@ -48,11 +32,19 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
       # Runs a single command using the runners shell
-     
+      - name: Run a one-line script
+        run: echo Hello, world!
 
       # Runs a set of commands using the runners shell
-       
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
       # Runs a set of commands using the runners shell
+      - name: Test action
+        run: |
+          echo Hello Everyone, GitHub is cool!
+          date
       - name: Terraform fmt
         id: fmt
         run: terraform fmt
@@ -66,15 +58,16 @@ jobs:
         id: validate
         run: terraform validate -no-color
 
-      - name: Terraform Plan - Destroy
+      - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color -destroy
+        run: terraform plan -no-color
         continue-on-error: false
-      - name: Terraform Destroy
-        id: destroy
-        run: terraform destroy -auto-approve -no-color
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push' # Only run apply for master, not branch checks
+        id: apply
+        run: terraform apply -auto-approve -no-color
       - uses: actions/github-script@0.9.0
-        if: github.event_name == 'pull_request'
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push' # Only run apply for master, not branch checks
         env:
           PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         with:
