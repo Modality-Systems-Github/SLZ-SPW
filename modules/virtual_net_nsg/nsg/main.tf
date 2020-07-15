@@ -7,7 +7,7 @@ resource "azurerm_network_security_group" "nsg_example" {
   tags = var.tags
 }
 resource "azurerm_network_security_rule" "example_rule_1" {
-  name                        = "test123"
+  name                        = "sql-outbound"
   priority                    = 100
   direction                   = "Outbound"
   access                      = "Allow"
