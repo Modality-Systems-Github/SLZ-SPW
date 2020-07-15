@@ -31,3 +31,14 @@ variable "log_analytics_rg" {
   # type = string
   default = "SBD-RG-OPS"
 }
+
+variable "tags" {
+  description = "A mapping of tags to assign to the resource."
+  type        = map
+
+  default = {
+    application = "vdc-hub"
+    environment = "development"
+    buildagent  = "github-actions"
+  }
+}
