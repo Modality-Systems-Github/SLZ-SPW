@@ -90,7 +90,7 @@ resource "azurerm_subnet" "bastionsubnet" {
   name                 = "AzureBastionSubnet"
   resource_group_name  = module.network_resourcegroup.resource_group_name
   virtual_network_name = module.network.name
-  address_prefix       = "10.0.200.0/24"
+  address_prefixs       = "10.0.200.0/24"
 }
 module "security_centre" {
   source          = "./modules/securitycentre"
