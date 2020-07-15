@@ -4,7 +4,28 @@ name: Destroy_Plan
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
-
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action to trigger (pull or push)'     
+        required: true
+        default: 'pull' 
+  repository_dispatch:
+    types:
+      - "Azure Activity Logs"
+      - "GitHub CLI"
+      - "PowerShell"
+      - "Bash"
+  pull_request:
+    branches:
+      - "main"
+  pull_request_review:
+    branches:
+      - "main"
+    types:
+      - "submitted"
+    
 env:
   ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }} 
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
