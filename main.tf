@@ -23,13 +23,13 @@ resource "azurerm_resource_group" "example-1" {
 }
 module "storage" {
   source               = "./modules/storageaccounts"
-  storage_account_name = "spwstore4"
+  storage_account_name = "${var.prefix}store1${lower(random_id.storage_account.hex)}"
   location             = azurerm_resource_group.example.location
   resourcegroupname    = azurerm_resource_group.example.name
 }
 module "storage2" {
   source               = "./modules/storageaccounts"
-  storage_account_name = "spwstore5"
+  storage_account_name = "${var.prefix}store2${lower(random_id.storage_account.hex)}"
   Replication_type     = "GRS"
   location             = azurerm_resource_group.example.location
   resourcegroupname    = azurerm_resource_group.example.name
@@ -102,14 +102,14 @@ module "security_centre" {
   resname         = var.security_centre_RG_Name
   location        = var.location
   subscription_id = var.subscription_id
-  prefix          = "spw-"
+  prefix          = var.prefix
 }
 module "log_analytics" {
   source   = "./modules/log_analytics"
   resname  = module.log_analytics_resourcegroup.resource_group_name
   location = var.location
   tags     = var.tags
-  prefix   = "spw-"
+  prefix   = var.prefix
   #name                = var.name
   #solution_plan_map   = var.solution_plan_map
   #resource_group_name = var.rg
